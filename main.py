@@ -1,7 +1,7 @@
 import sys
 
 from db import Database
-from db_schema import CREATE_USERS
+#from db_schema import CREATE_USERS
 
 from index_view import welcome
 
@@ -10,12 +10,7 @@ class Application:
     @classmethod
     def build(self):
         db = Database()
-        db.cursor.execute(CREATE_USERS)
-        # TODO: Build rest of the tables
-        # TODO: Seed with inistial data - consider using another command for this
-
-        db.connection.commit()
-        db.connection.close()
+        db.create_db_tables()
 
         print('Done.')
 

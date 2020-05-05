@@ -22,10 +22,7 @@ class Database:
         CREATE TABLE IF NOT EXISTS  User (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(130) NOT NULL,
-        type VARCHAR(8),
-        CONSTRAINT chk_type CHECK (type IN("client", "employee"))
-        );
+        password VARCHAR(130) NOT NULL
         '''
 
         self.cursor.execute(query_users)
@@ -78,6 +75,11 @@ class Database:
         self.cursor.execute(query_reservations)
 
         self.connection.commit()
+
+    def create_user(*, email, password):
+        user_data(email, password, "client")
+        query_create_user = '''
+        '''
 
 
 def main():
