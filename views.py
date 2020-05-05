@@ -11,5 +11,7 @@ class UserViews:
     def signup(self):
         email = input('Email: ')
         password = input('Password: ')
-
-        self.controller.create_user(email=email, password=password)
+        try:
+            self.controller.create_user(email=email, password=password)
+        except Exception as e:
+            print(e)
