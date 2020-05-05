@@ -115,3 +115,8 @@ DELETE_RESERVATION = '''
 DELETE FROM Reservations
 WHERE user_id = ? AND projection_id = ? AND row = ? AND col = ?;
 '''
+GET_SEATS = '''
+SELECT row, col
+FROM Reservations
+WHERE projection_id = ?;
+'''

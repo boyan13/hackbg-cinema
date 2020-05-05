@@ -82,6 +82,12 @@ class Database:
         self.cursor.execute(DELETE_RESERVATION, reservation_data)
         self.connection.commit()
 
+    def get_seats(self, *, projection_id):
+        self.cursor.execute(GET_SEATS, (projection_id,))
+        seats = self.cursor.fetchall()
+        self.connection.commit()
+        return seats
+
     def __del__(self):
         self.connection.close()
         # print('Am closing meself')
@@ -101,7 +107,7 @@ def main():
     # projections = d.show_all_projections(movie_id=1)#, order="DESC")
     # print("Projections")
     # for p in projections:
-    #     print("ID: {}, Date: {}, Time: {}, Type: {}, sits: {}".format(p[0], p[1], p[2], p[3], p[4]))
+    #     print("ID: {}, Date: {}, Time: {}, Type: {}, seats: {}".format(p[0], p[1], p[2], p[3], p[4]))
     # d.make_reservation(user_id=1,projection_id=1,row=4,col=5)
     # pr = d.show_projections_date(movie_id=1, date="2020-05-10")
     # for p in pr:
@@ -110,6 +116,7 @@ def main():
     # pr = d.show_projections_date(movie_id=1, date="2020-05-10")
     # for p in pr:
     #     print(p)
+    print(d.get_seats(projection_id=1))
 
 
 if __name__ == '__main__':
