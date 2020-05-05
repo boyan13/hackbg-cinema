@@ -10,90 +10,22 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def create_db_tables(self):
-        query_movies = '''
-        CREATE TABLE IF NOT EXISTS  Movies (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name VARCHAR(100) NOT NULL,
-        rating REAL NOT NULL DEFAULT 0 CHECK (rating BETWEEN 0 AND 10)
-        );'''
-
-        self.cursor.execute(query_movies)
-
-        query_users = '''
-        CREATE TABLE IF NOT EXISTS  User (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(130) NOT NULL
-        );
-        '''
-
-        self.cursor.execute(query_users)
-
-        query_client = '''
-        CREATE TABLE IF NOT EXISTS  Client (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER UNIQUE NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES User(id)
-        );
-        '''
-
-        self.cursor.execute(query_client)
-
-        query_employee = '''
-        CREATE TABLE IF NOT EXISTS  Empoyee (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER UNIQUE NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES User(id)
-        );
-        '''
-
-        self.cursor.execute(query_employee)
-
-        query_projections = '''
-        CREATE TABLE IF NOT EXISTS  Projections (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        movie_id INTEGER UNIQUE NOT NULL,
-        type VARCHAR(5),
-        date VARCHAR(10) NOT NULL,
-        time VARCHAR(5) NOT NULL,
-        FOREIGN KEY (movie_id) REFERENCES Movies(id)
-        );
-        '''
-
-        self.cursor.execute(query_projections)
-
-        query_reservations = '''
-        CREATE TABLE IF NOT EXISTS  Reservations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        projection_id INTEGER NOT NULL,
-        row INTEGER NOT NULL CHECK (row BETWEEN 1 AND 10),
-        col INTEGER NOT NULL CHECK (col BETWEEN 1 AND 10),
-        FOREIGN KEY (user_id) REFERENCES User(id),
-        FOREIGN KEY (projection_id) REFERENCES Projection(id)
-        );
-        '''
-
-        self.cursor.execute(query_reservations)
+        self.cursor.execute(MOVIES)
+        self.cursor.execute(USERS)
+        self.cursor.execute(CLIENT)
+        self.cursor.execute(EMPLOYEE)
+        self.cursor.execute(PROJECTIONS)
+        self.cursor.execute(RESERVATIONS)
 
         self.connection.commit()
 
     def create_user(self, *, email, password):
         user_data = (email, password)
-        query_create_user = '''
-        INSERT INTO User (email, password)
-        VALUES (?, ?);
-        '''
-        self.cursor.execute(query_create_user, user_data)
+        self.cursor.execute(CREATE_USER, user_data)
 
         id = self.get_user_id(email)
 
-        query_create_client = '''
-        INSERT INTO Client (user_id)
-        VALUES (?);
-        '''
-
-        self.cursor.execute(query_create_client, (id,))
+        self.cursor.execute(CREATE_CLIENT, (id,))
         self.connection.commit()
 
     def fetch_user(self, *, email, password):
@@ -102,24 +34,67 @@ class Database:
         return self.cursor.fetchone()
 
     def get_user_id(self, email):
-        query = '''SELECT id FROM User WHERE email = ?'''
-        self.cursor.execute(query, (email,))
+        self.cursor.execute(GET_USER_ID, (email,))
         user = self.cursor.fetchone()
         self.connection.commit()
         if user is not None:
             return user[0]
         return 0
 
+    def add_movies(self, *, title, rating):
+        self.cursor.execute(ADD_MOVIE, (title, rating))
+        self.connection.commit()
+
+    def show_movies(self):
+        self.cursor.execute(SHOW_MOVIES)
+        movies = self.cursor.fetchall()
+        self.connection.commit()
+        # for m in movies:
+        #     print("ID: {}, Title: {}, Rating: {}".format(m[0], m[1], m[2]))
+        return movies
+
+    def add_projection(self, *, date, time, movie_id, type):
+        self.cursor.execute(ADD_PROJECTION, (movie_id, date, time, type))
+        self.connection.commit()
+
+    def show_all_projections(self, *, movie_id, order="ASC"):
+        if order.upper() == "DESC":
+            self.cursor.execute(SHOW_ALL_PROJECTIONS_D, (movie_id,))
+        else:
+            self.cursor.execute(SHOW_ALL_PROJECTIONS, (movie_id,))
+        projections = self.cursor.fetchall()
+        self.connection.commit()
+        return projections
+
+    def show_projections_date(self, *, movie_id, date):
+        self.cursor.execute(SHOW_PROJECTIONS, (movie_id, date))
+        projections = self.cursor.fetchall()
+        self.connection.commit()
+        return projections
+
     def __del__(self):
         self.connection.close()
         # print('Am closing meself')
 
 
+
 def main():
     d = Database()
-    d.create_db_tables()
-    d.create_user(email="sisi@abv.bg", password="azAz1aaa")
-
+    # d.create_db_tables()
+    # d.create_user(email="sisi@abv.bg", password="azAz1aaa")
+    # d.add_movies(title="Star wars VII", rating=8.5)
+    # d.add_movies(title="Star wars IX", rating=8.7)
+    # d.add_projection(movie_id=1, date="09-06-2020", time="13:45", type="3D")
+    # movies = d.show_movies()
+    # for m in movies:
+    #     print("ID: {}, Title: {}, Rating: {}".format(m[0], m[1], m[2]))
+    # projections = d.show_all_projections(movie_id=1)#, order="DESC")
+    # print("Projections")
+    # for p in projections:
+    #     print("ID: {}, Date: {}, Time: {}, Type: {}, sits: {}".format(p[0], p[1], p[2], p[3], p[4]))
+    pr = d.show_projections_date(movie_id=1, date="2020-05-10")
+    for p in pr:
+        print(p)
 
 if __name__ == '__main__':
     main()
