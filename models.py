@@ -2,10 +2,10 @@ import re
 
 
 class UserModel:
-    def __init__():#(self, *, id, email, password):
-        self.id = -1
-        # self.email = email
-        # self.password = password
+    def __init__(self, *, id, email, password):
+        self.id = id
+        self.email = email
+        self.password = password
 
     @staticmethod
     def validate(email, password):
