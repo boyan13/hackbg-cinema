@@ -1,8 +1,6 @@
 import sys
 
 from db import Database
-#from db_schema import CREATE_USERS
-
 from index_view import welcome
 
 
@@ -11,6 +9,7 @@ class Application:
     def build(self):
         db = Database()
         db.create_db_tables()
+        db.close()
 
         print('Done.')
 

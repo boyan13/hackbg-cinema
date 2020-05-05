@@ -9,7 +9,7 @@ import re
 
 class UserGateway:
     def __init__(self):
-        self.model = UserModel(id=-1, email="AAAAAA",password=None)
+        self.model = UserModel(id=None, email=None)
         self.db = Database()
 
     @staticmethod
@@ -49,9 +49,19 @@ class UserGateway:
         print(secret_password)
         print(len(secret_password))
 
-        # self.db.cursor.execute()  # TODO: create user query
+        self.db.create_user(email=email, password=secret_password)
 
         # TODO: What whould I return?
+
+    def set_user(self, *, email, password):
+        hashpass = self.make_it_secret(password)
+        raw_user = self.db.fetch_user(email=email, password=hashpass)
+
+        if raw_user is None:
+            raise RuntimeError("User not found.")
+        else:
+            user_id, user_email = raw_user
+            self.model = UserModel(id=user_id, email=user_email)
 
     def all(self):
         raw_users = self.db.cursor.execute()  # TODO: Select all users
@@ -66,3 +76,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
