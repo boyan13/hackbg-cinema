@@ -23,6 +23,7 @@ class Database:
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email VARCHAR(50) UNIQUE NOT NULL,
         password VARCHAR(130) NOT NULL
+        );
         '''
 
         self.cursor.execute(query_users)
@@ -76,16 +77,38 @@ class Database:
 
         self.connection.commit()
 
-    def create_user(*, email, password):
-        user_data(email, password, "client")
+    def create_user(self, *, email, password):
+        user_data = (email, password)
         query_create_user = '''
+        INSERT INTO User (email, password)
+        VALUES (?, ?);
         '''
+        self.cursor.execute(query_create_user, user_data)
+
+        id = self.get_user_id(email)
+
+        query_create_client = '''
+        INSERT INTO Client (user_id)
+        VALUES (?);
+        '''
+
+        self.cursor.execute(query_create_client, (id,))
+        self.connection.commit()
+
+    def get_user_id(self, email):
+        query = '''SELECT id FROM User WHERE email = ?'''
+        self.cursor.execute(query, (email,))
+        user = self.cursor.fetchone()
+        self.connection.commit()
+        if user is not None:
+            return user[0]
+        return 0
 
 
 def main():
     d = Database()
     d.create_db_tables()
-
+    d.create_user(email="sisi@abv.bg", password="azAz1aaa")
 
 if __name__ == '__main__':
     main()
