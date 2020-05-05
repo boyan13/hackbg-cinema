@@ -107,3 +107,11 @@ WHERE movie_id = ? and date like ?
 GROUP BY p.id;
 '''
 
+MAKE_RESERVETION = '''
+INSERT INTO Reservations(user_id, projection_id, row, col)
+VALUES (?, ?, ?, ?);'''
+
+DELETE_RESERVATION = '''
+DELETE FROM Reservations
+WHERE user_id = ? AND projection_id = ? AND row = ? AND col = ?;
+'''

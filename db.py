@@ -72,6 +72,16 @@ class Database:
         self.connection.commit()
         return projections
 
+    def make_reservation(self, *, user_id, projection_id, row, col):
+        reservation_data = (user_id, projection_id, row, col)
+        self.cursor.execute(MAKE_RESERVETION, reservation_data)
+        self.connection.commit()
+
+    def delete_reservation(self, *, user_id, projection_id, row, col):
+        reservation_data = (user_id, projection_id, row, col)
+        self.cursor.execute(DELETE_RESERVATION, reservation_data)
+        self.connection.commit()
+
     def __del__(self):
         self.connection.close()
         # print('Am closing meself')
@@ -92,9 +102,15 @@ def main():
     # print("Projections")
     # for p in projections:
     #     print("ID: {}, Date: {}, Time: {}, Type: {}, sits: {}".format(p[0], p[1], p[2], p[3], p[4]))
-    pr = d.show_projections_date(movie_id=1, date="2020-05-10")
-    for p in pr:
-        print(p)
+    # d.make_reservation(user_id=1,projection_id=1,row=4,col=5)
+    # pr = d.show_projections_date(movie_id=1, date="2020-05-10")
+    # for p in pr:
+    #     print(p)
+    # d.delete_reservation(user_id=1,projection_id=1,row=4,col=5)
+    # pr = d.show_projections_date(movie_id=1, date="2020-05-10")
+    # for p in pr:
+    #     print(p)
+
 
 if __name__ == '__main__':
     main()
