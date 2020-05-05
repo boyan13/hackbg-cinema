@@ -1,5 +1,6 @@
 import sqlite3
 
+from queries import *
 from settings import DB_NAME
 
 
@@ -95,6 +96,11 @@ class Database:
         self.cursor.execute(query_create_client, (id,))
         self.connection.commit()
 
+    def fetch_user(self, *, email, password):
+        query_args = (email, password)
+        self.cursor.execute(FETCH_USER, query_args)
+        return self.cursor.fetchone()
+
     def get_user_id(self, email):
         query = '''SELECT id FROM User WHERE email = ?'''
         self.cursor.execute(query, (email,))
@@ -104,11 +110,16 @@ class Database:
             return user[0]
         return 0
 
+    def __del__(self):
+        self.connection.close()
+        # print('Am closing meself')
+
 
 def main():
     d = Database()
     d.create_db_tables()
     d.create_user(email="sisi@abv.bg", password="azAz1aaa")
+
 
 if __name__ == '__main__':
     main()
