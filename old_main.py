@@ -1,7 +1,7 @@
 import sys
 
 from db import Database
-from index_view import curses_main
+from index_view import welcome
 
 
 class Application:
@@ -15,7 +15,7 @@ class Application:
 
     @classmethod
     def start(self):
-        curses_main()
+        welcome()
 
 
 if __name__ == '__main__':
