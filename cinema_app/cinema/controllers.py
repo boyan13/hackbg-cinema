@@ -66,3 +66,7 @@ class CinemaController:
     def user_seats(self, projection_id):
         user_id = self.cinema_gateway.get_user_id()
         return self.user_gateway.get_user_seats(id=id, projection_id=projection_id)
+
+    @login_required
+    def get_user_info(self):
+        return self.cinema_gateway.get_user_info()
