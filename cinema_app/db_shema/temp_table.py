@@ -15,4 +15,4 @@ INSERT INTO temp_user (id, email)
 VALUES (?, ?);
 '''
 
-DROP_TABLE = '''DROP TABLE IF EXICTS temp_user;'''
+DROP_TABLE = '''DROP TABLE IF EXISTS temp_user;'''
