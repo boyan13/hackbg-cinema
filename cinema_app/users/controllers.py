@@ -12,6 +12,7 @@ class UserContoller:
         self.user_gateway.model.validate(email, password)
         hashpass = self.make_it_secret(password)
         self.user_gateway.create(email=email, password=hashpass)
+        self.get_user(email=email, password=password)
 
         # send email
         # sync with Slack
@@ -23,13 +24,15 @@ class UserContoller:
         if raw_user is None:
             raise Exception("User not found.")
         else:
+            self.user_gateway.set_temp_user(id=raw_user[0], email=raw_user[1])
+            return "Login!"
             # TODO temp Table User_t return raw_user
-
+    """
     def show_movies(self):
         m = self.user_gateway.get_movies()
         for i in m:
             print(i)
-
+    
     def show_all_projections(self, *, movie_id, order):
         try:
             pr = self.user_gateway.get_projectons(movie_id=movie_id, order=order)
@@ -56,22 +59,23 @@ class UserContoller:
                 seats_map += "\n{}  ".format(row)
             else:
                 seats_map += "\n{} ".format(row)
-            for col in range (1,11):
+            for col in range(1,11):
                 if (row, col) in seats:
                     seats_map += "* "
                 else:
                     seats_map += "- "
         print(seats_map)
         return seats_map
-
+    
     def reserved_seats(self, projection_id):
         return self.user_gateway.return_reserved_seats(projection_id)
 
     def delete_reserved_seat(self, *, projection_id, row, col):
         self.user_gateway.delete_reservation(projection_id=projection_id, row=row, col=col)
-
+    
     def make_reservation(self, *, projection_id, row, col):
         self.user_gateway.insert_reservation(projection_id=projection_id, row=row, col=col)
 
     def user_seats(self, projection_id):
         return self.user_gateway.get_user_seats(projection_id=projection_id)
+    """
