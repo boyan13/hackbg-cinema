@@ -9,7 +9,6 @@ class Application:
     def build(self):
         db = Database()
         db.create_db_tables()
-        db.close()
 
         print('Done.')
 

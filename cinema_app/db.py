@@ -1,6 +1,6 @@
 import sqlite3
 
-from db_shema.queries import *
+from .db_shema.queries import *
 from .settings import DB_NAME
 
 

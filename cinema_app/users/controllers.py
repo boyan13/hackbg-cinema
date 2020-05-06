@@ -17,13 +17,13 @@ class UserContoller:
         # sync with Slack
 
     def get_user(self, *, email, password):
-        self.user_gateway.model.validate(email, password)
         hashpass = self.make_it_secret(password)
         raw_user = self.user_gateway.get_user(email=email, password=hashpass)
         if raw_user is None:
             raise Exception("User not found.")
         else:
             # TODO temp Table User_t return raw_user
+            pass
 
     def show_movies(self):
         m = self.user_gateway.get_movies()
