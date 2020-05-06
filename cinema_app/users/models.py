@@ -5,7 +5,8 @@ class UserModel:
     def __init__(self, *, id, email):
         self.id = id
         self.email = email
-
+        self.signin_exceptions = ["Invalid email.", "Make sure your password is at lest 8 letters.", "Make sure your password has a number in it.", "Make sure your password has a capital letter in it."]
+        self.login_exceptions = ["User not found."]
     @staticmethod
     def validate(email, password):
         count_at = email.count("@")
