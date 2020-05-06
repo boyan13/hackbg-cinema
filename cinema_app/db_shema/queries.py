@@ -131,3 +131,9 @@ SELECT row, col
 FROM Reservations
 WHERE projection_id = ? AND user_id = ?;
 '''
+
+GET_ALL_PROJECTIONS = '''
+SELECT m.name, p.time, p.date, p.id
+FROM Projections AS p LEFT JOIN Movies AS m
+ON p.movie_id = m.id
+'''

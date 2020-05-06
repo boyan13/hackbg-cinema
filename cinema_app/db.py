@@ -114,6 +114,12 @@ class Database:
         self.connection.commit()
         return movie
 
+    def all_projections(self):
+        self.cursor.execute(GET_ALL_PROJECTIONS)
+        pr = self.cursor.fetchall()
+        self.connection.commit()
+        return movie
+
     def __del__(self):
         self.cursor.execute(DROP_TABLE)
         self.connection.commit()

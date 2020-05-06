@@ -37,5 +37,6 @@ class CinemaGateway:
 
     def get_user_info(self):
         return self.db.get_temp_user()
-    # def get_resurved_seats(self, projection_id):
-    #     return self.db.get_seats(projection_id=projection_id)
+
+    def all_projections(self):
+        return self.db.get_all_projections()
