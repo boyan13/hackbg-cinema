@@ -52,6 +52,10 @@ class CinemaController:
     def reserved_seats(self, projection_id):
         return self.cinema_gateway.get_seats(projection_id)
 
+    def all_projections(self):
+        pr = self.cinema_gateway.all_projections()
+        return self.cinema_gateway.model.validate_list_elements(pr)
+
     @login_required
     def delete_reserved_seat(self, *, projection_id, row, col):
         id = self.cinema_gateway.get_user_id()
@@ -66,3 +70,7 @@ class CinemaController:
     def user_seats(self, projection_id):
         user_id = self.cinema_gateway.get_user_id()
         return self.user_gateway.get_user_seats(id=id, projection_id=projection_id)
+
+    @login_required
+    def get_user_info(self):
+        return self.cinema_gateway.get_user_info()
