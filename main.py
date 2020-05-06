@@ -1,7 +1,7 @@
 import sys
 
-from db import Database
-from index_view import curses_main
+from cinema_app.db import Database
+from cinema_app.index_view import curses_main
 
 
 class Application:
