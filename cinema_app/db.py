@@ -1,6 +1,7 @@
 import sqlite3
 
-from db_shema.queries import *
+from .db_shema.queries import *
+from .db_shema.temp_table import *
 from .settings import DB_NAME
 
 
@@ -31,7 +32,19 @@ class Database:
     def fetch_user(self, *, email, password):
         query_args = (email, password)
         self.cursor.execute(FETCH_USER, query_args)
-        return self.cursor.fetchone()
+        user = self.cursor.fetchone()
+        self.connection.commit()
+        return user
+
+    def create_temp_user(self, *, id, email):
+        self.cursor.execute(CREATE_TEMP_USER)
+        self.cursor.execute(INSERT_TEMP_USER, (id, email))
+        self.connection.commit()
+
+    def get_temp_user(self):
+        self.cursor.execute(GET_TEMP_USER)
+        user = self.cursor.fetchone()
+        self.connection.commit()
 
     def get_user_id(self, email):
         self.cursor.execute(GET_USER_ID, (email,))
@@ -102,6 +115,8 @@ class Database:
         return movie
 
     def __del__(self):
+        self.cursor.execute(DROP_TABLE)
+        self.connection.commit()
         self.connection.close()
         # print('Am closing meself')
 
@@ -129,7 +144,7 @@ def main():
     # pr = d.show_projections_date(movie_id=1, date="2020-05-10")
     # for p in pr:
     #     print(p)
-    print(d.get_seats(projection_id=1))
+    # print(d.get_seats(projection_id=1))
 
 
 if __name__ == '__main__':
