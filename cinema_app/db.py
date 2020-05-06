@@ -1,7 +1,7 @@
 import sqlite3
 
-from queries import *
-from settings import DB_NAME
+from db_shema.queries import *
+from .settings import DB_NAME
 
 
 class Database:
@@ -87,6 +87,19 @@ class Database:
         seats = self.cursor.fetchall()
         self.connection.commit()
         return seats
+
+    def get_user_seats(self, *, projection_id, user_id):
+        data = (projection_id, user_id)
+        self.cursor.execute(GET_USER_SEATS, data)
+        seats = self.cursor.fetchall()
+        self.connection.commit()
+        return seats
+
+    def get_movie_by_id(self, movie_id):
+        self.cursor.execute(GET_MOVIE_BY_ID, (movie_id,))
+        movie = self.cursor.fetchone()
+        self.connection.commit()
+        return movie
 
     def __del__(self):
         self.connection.close()

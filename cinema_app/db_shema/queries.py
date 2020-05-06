@@ -120,3 +120,14 @@ SELECT row, col
 FROM Reservations
 WHERE projection_id = ?;
 '''
+
+GET_MOVIE_BY_ID = '''
+SELECT *
+FROM Movies
+WHERE id = ?;'''
+
+GET_USER_SEATS = '''
+SELECT row, col
+FROM Reservations
+WHERE projection_id = ? AND user_id = ?;
+'''
