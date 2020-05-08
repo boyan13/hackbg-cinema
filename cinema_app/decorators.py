@@ -5,7 +5,7 @@ def login_required(func):
     d = Database()
     def wrapper(*args, **kwargs):
         d.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='temp_user';")
-        user = d.cursor.fetchall()
+        user = d.cursor.fetchone()
         d.connection.commit()
         if user is not None:
             return func(*args, **kwargs)

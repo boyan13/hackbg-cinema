@@ -4,7 +4,6 @@ from .db_shema.queries import *
 from .db_shema.temp_table import *
 from .settings import DB_NAME
 
-
 class Database:
     def __init__(self):
         self.connection = sqlite3.connect(DB_NAME)
@@ -45,6 +44,7 @@ class Database:
         self.cursor.execute(GET_TEMP_USER)
         user = self.cursor.fetchone()
         self.connection.commit()
+        return user
 
     def get_user_id(self, email):
         self.cursor.execute(GET_USER_ID, (email,))
@@ -118,18 +118,21 @@ class Database:
         self.cursor.execute(GET_ALL_PROJECTIONS)
         pr = self.cursor.fetchall()
         self.connection.commit()
-        return movie
+        return pr
 
-    def get_user_raservations(self):
-        user_id = self.get_temp_user()[0]
-        self.cursor.execute(GET_USER_RESERVATIONS, (user_id,))
+    def get_user_reservation(self, id):
+        self.cursor.execute(GET_USER_RESERVATIONS, (id,))
+        r = self.cursor.fetchall()
+        self.connection.commit()
+        return r
 
-    def __del__(self):
+    def del_temp_user(self):
         self.cursor.execute(DROP_TABLE)
         self.connection.commit()
-        self.connection.close()
-        # print('Am closing meself')
 
+    def __del__(self):
+        self.connection.close()
+        #print('Am closing meself')
 
 
 def main():
