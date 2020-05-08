@@ -43,7 +43,6 @@ def redirect(stdscr, string):
         cinema_views.print_movies()
 
     else:
-        # user_views.controller.del_temp_user()
         raise ValueError
 
     main_menu(stdscr)
@@ -121,9 +120,6 @@ def main_menu(stdscr):
                 stdscr.addstr(h // 2, w // 2 - 8, "Goodbye!")
                 stdscr.refresh()
                 time.sleep(1)
-
-                user = UserViews()
-                user.controller.del_temp_user()
                 exit()
 
             elif selected_row in [2, 3, 4]:
