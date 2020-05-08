@@ -38,7 +38,6 @@ def redirect(stdscr, string):
     else:
         raise ValueError
 
-    main_menu(stdscr)
 
 def print_menu(stdscr, selected_row_idx):
     stdscr.clear()

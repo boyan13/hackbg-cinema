@@ -120,6 +120,10 @@ class Database:
         self.connection.commit()
         return movie
 
+    def get_user_raservations(self):
+        user_id = self.get_temp_user()[0]
+        self.cursor.execute(GET_USER_RESERVATIONS, (user_id,))
+
     def __del__(self):
         self.cursor.execute(DROP_TABLE)
         self.connection.commit()
