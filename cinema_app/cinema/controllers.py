@@ -8,7 +8,7 @@ class CinemaController:
 
     def get_movies(self):
         movies = self.cinema_gateway.get_movies()
-        return self.cinema_gateway.model.validate_list_elements(movies)
+        return self.cinema_gateway.model.validete_list_elements(movies)
 
     def get_all_projections(self, *, movie_id, order = "ASC"):
         movie = self.cinema_gateway.get_movie(id)
@@ -36,10 +36,11 @@ class CinemaController:
         seats_map.append("   1 2 3 4 5 6 7 8 9 10")
         row_temp = ""
         for row in range(1, 11):
+            row_temp = ""
             if row != 10:
-                row_temp += "\n{}  ".format(row)
+                row_temp += "{}  ".format(row)
             else:
-                row_temp += "\n{} ".format(row)
+                row_temp += "{} ".format(row)
 
             for col in range(1, 11):
                 if (row, col) in seats:
@@ -54,23 +55,28 @@ class CinemaController:
 
     def all_projections(self):
         pr = self.cinema_gateway.all_projections()
-        return self.cinema_gateway.model.validate_list_elements(pr)
+        return self.cinema_gateway.model.validete_list_elements(pr)
 
     @login_required
     def delete_reserved_seat(self, *, projection_id, row, col):
-        id = self.cinema_gateway.get_user_id()
+        id = self.cinema_gateway.get_user_info()[0]
         self.cinema_gateway.delete_reservation(id=id, projection_id=projection_id, row=row, col=col)
 
     @login_required
     def make_reservation(self, *, projection_id, row, col):
-        id = self.cinema_gateway.get_user_id()
-        self.user_gateway.insert_reservation(id=id, projection_id=projection_id, row=row, col=col)
+        id = self.cinema_gateway.get_user_info()[0]
+        self.cinema_gateway.insert_reservation(id=id, projection_id=projection_id, row=row, col=col)
 
     @login_required
     def user_seats(self, projection_id):
-        user_id = self.cinema_gateway.get_user_id()
-        return self.user_gateway.get_user_seats(id=id, projection_id=projection_id)
+        id = self.cinema_gateway.get_user_info()[0]
+        return self.cinema_gateway.get_user_seats(id=id, projection_id=projection_id)
 
     @login_required
     def get_user_info(self):
         return self.cinema_gateway.get_user_info()
+
+    @login_required
+    def get_user_reservation(self, id):
+        id = self.cinema_gateway.get_user_info()[0]
+        return self.cinema_gateway.get_user_reservation(id)
