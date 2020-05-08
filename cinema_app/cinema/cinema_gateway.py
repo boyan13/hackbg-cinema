@@ -6,7 +6,6 @@ class CinemaGateway:
     def __init__(self):
         self.model = MovieModel(id=None, name=None, rating=None)
         self.db = Database()
-
     def get_movies(self):
         return self.db.show_movies()
 
@@ -19,7 +18,7 @@ class CinemaGateway:
     def get_projections_by_date(set, *, movie_id, date):
         return self.db.show_projections_date(movie_id=movie_id, date=date)
 
-    def get_seats(self, projecton_id):
+    def get_seats(self, projection_id):
         return self.db.get_seats(projection_id=projection_id)
 
     def delete_reservation(self, *, id, projection_id, row, col):
@@ -39,4 +38,7 @@ class CinemaGateway:
         return self.db.get_temp_user()
 
     def all_projections(self):
-        return self.db.get_all_projections()
+        return self.db.all_projections()
+
+    def get_user_reservation(self, id):
+        return self.db.get_user_reservation(id)
