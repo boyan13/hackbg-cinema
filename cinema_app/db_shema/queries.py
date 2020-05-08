@@ -121,14 +121,6 @@ FROM Reservations
 WHERE projection_id = ?;
 '''
 
-GET_USER_RESERVATIONS = '''
-SELECT r.row, r.col, m.name, p.time, p.date, p.id, r.ID
-FROM Reservations AS r LEFT JOIN 
-Projections AS p ON r.projection_id = p.id LEFT JOIN Movies AS m
-ON p.movie_id = m.id
-WHERE r.user_id =  ?;
-'''
-
 GET_MOVIE_BY_ID = '''
 SELECT *
 FROM Movies
@@ -140,8 +132,24 @@ FROM Reservations
 WHERE projection_id = ? AND user_id = ?;
 '''
 
-GET_ALL_PROJECTIONS = '''
+GET_USER_RESERVATIONS = '''
+SELECT r.row, r.col, m.name, p.time, p.date, p.id, r.ID
+FROM Reservations AS r LEFT JOIN
+Projections AS p ON r.projection_id = p.id LEFT JOIN Movies AS m
+ON p.movie_id = m.id
+WHERE r.user_id =  ?;
+'''
+
+GET_ALL_PROJECTIONS_old = '''
 SELECT m.name, p.time, p.date, p.id
 FROM Projections AS p LEFT JOIN Movies AS m
 ON p.movie_id = m.id
 '''
+
+GET_ALL_PROJECTIONS = '''
+SELECT m.name, p.time, p.date, p.id, 100 - COUNT(r.id) as seats
+FROM Projections AS p LEFT JOIN Movies AS m
+ON p.movie_id = m.id
+left JOIN Reservations AS r ON p.id = r.projection_id
+GROUP BY p.id
+ORDER BY date ASC;'''
