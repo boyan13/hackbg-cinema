@@ -7,40 +7,6 @@ class UserViews:
 
     def __init__(self):
         self.controller = UserContoller()
-        self.login_exceptions = self.controller.user_gateway.model.login_exceptions
-        self.signin_exceptions = self.controller.user_gateway.model.signin_exceptions
-
-    def retry_dialogue(self, stdscr, message):
-        stdscr.clear()
-        h, w = stdscr.getmaxyx()
-        selected_col = 0
-        while 1:
-            stdscr.addstr(h // 2 - 4, w // 2 - len(message) // 2, message)
-
-            if selected_col == 0:
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(h // 2, w // 2 - len("Cancel") // 2 - 10, "Cancel")
-                stdscr.attroff(curses.color_pair(1))
-                stdscr.addstr(h // 2, w // 2 + len("Retry") // 2 + 10, "Retry")
-            elif selected_col == 1:
-                stdscr.addstr(h // 2, w // 2 - len("Cancel") // 2 - 10, "Cancel")
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(h // 2, w // 2 + len("Retry") // 2 + 10, "Retry")
-                stdscr.attroff(curses.color_pair(1))
-
-            stdscr.refresh()
-            key = stdscr.getch()
-            stdscr.clear()
-
-            if key == curses.KEY_LEFT and selected_col == 1:
-                selected_col = 0
-            elif key == curses.KEY_RIGHT and selected_col == 0:
-                selected_col = 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if selected_col == 0:
-                    return False
-                elif selected_col == 1:
-                    return True
 
     def account_form(self, stdscr, form_title):
         stdscr.clear()
@@ -110,32 +76,15 @@ class UserViews:
         stdscr.clear()
         e, p = self.account_form(stdscr, "Login")
         stdscr.clear()
-        try:
-            self.controller.get_user(email=e, password=p)
-        except Exception as exc:
-            if str(exc) not in self.login_exceptions:
-                raise
-            else:
-                if self.retry_dialogue(stdscr, str(exc)):
-                    self.login(stdscr)
-                else:
-                    return
+
+        self.controller.get_user(email=e, password=p)
 
     def signin(self, stdscr):
         stdscr.clear()
         e, p = self.account_form(stdscr, "Sign in")
         stdscr.clear()
 
-        try:
-            self.controller.create_user(email=e, password=p)
-        except Exception as exc:
-            if str(exc) not in self.signin_exceptions:
-                raise
-            else:
-                if self.retry_dialogue(stdscr, str(exc)):
-                    self.signin(stdscr)
-                else:
-                    return
+        self.controller.create_user(email=e, password=p)
 
 
 if __name__ == '__main__':
