@@ -1,7 +1,7 @@
 import sys
 
 from cinema_app.db import Database
-from cinema_app.index_view import curses_main
+from cinema_app.index_view import curses_main, user
 
 
 class Application:
@@ -23,6 +23,14 @@ if __name__ == '__main__':
     if command == 'build':
         Application.build()
     elif command == 'start':
-        Application.start()
+        try:
+            Application.start()
+        except Exception as exc:
+            raise
+        finally:
+            db = Database()
+            db.del_temp_user()
+
+
     else:
         raise ValueError(f'Unknown command {command}. Valid ones are "build" and "start"')
