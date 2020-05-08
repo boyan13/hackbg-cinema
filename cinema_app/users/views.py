@@ -89,15 +89,18 @@ class UserViews:
                 if key == curses.KEY_DC or key == curses.KEY_BACKSPACE or key == 127:
                     if len(display) > 0:
                         display = display[:-1]
-                    if cursor_movement_x > 0:
+                    if cursor_movement_x > line_start_x:
                         cursor_movement_x -= 1
                     if len(password) > 0:
                         password = password[:-1]
 
                 else:
-                    display += '*'
-                    cursor_movement_x += 1
-                    password += chr(key)
+                    if len(display) < 50:
+                        display += '*'
+                    if cursor_movement_x < line_start_x + 50:
+                        cursor_movement_x += 1
+                    if len(password) < 50:
+                        password += chr(key)
 
                 stdscr.addstr(line_start_y, line_start_x, display)
                 stdscr.refresh()
