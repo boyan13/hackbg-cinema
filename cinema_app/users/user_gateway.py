@@ -11,8 +11,6 @@ class UserGateway:
         self.model = UserModel(id=None, email=None)
         self.db = Database()
 
-
-
     def create(self, *, email, password):
         self.db.create_user(email=email, password=password)
 
@@ -23,6 +21,9 @@ class UserGateway:
 
     def set_temp_user(self, *, id, email):
         self.db.create_temp_user(id=id, email=email)
+
+    def del_temp_user(self):
+        self.db.del_temp_user()
 
     """
     def get_movies(self):

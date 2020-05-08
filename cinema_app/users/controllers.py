@@ -12,7 +12,7 @@ class UserContoller:
         self.user_gateway.model.validate(email, password)
         hashpass = self.make_it_secret(password)
         self.user_gateway.create(email=email, password=hashpass)
-        self.get_user(email=email, password=password)
+        # self.get_user(email=email, password=password)
 
         # send email
         # sync with Slack
@@ -24,6 +24,10 @@ class UserContoller:
             raise Exception("User not found.")
         else:
             self.user_gateway.set_temp_user(id=raw_user[0], email=raw_user[1])
-            return 
+            return "Login!"
             # TODO temp Table User_t return raw_user
             pass
+
+
+    def del_temp_user(self):
+        self.user_gateway.del_temp_user()
