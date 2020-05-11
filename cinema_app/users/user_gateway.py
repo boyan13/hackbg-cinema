@@ -1,6 +1,6 @@
-#import sys
-#sys.path.append(".")
 from ..db import Database
+from ..db_shema.user import *
+from ..db_shema.temp_table import *
 from .models import UserModel
 
 
@@ -12,62 +12,37 @@ class UserGateway:
         self.db = Database()
 
     def create(self, *, email, password):
-        self.db.create_user(email=email, password=password)
+        user_data = (email, password)
+        self.db.cursor.execute(CREATE_USER, user_data)
+        u_id = self.get_user_id(email)
+        self.db.cursor.execute(CREATE_CLIENT, (u_id,))
+        self.db.connection.commit()
 
         # TODO: What whould I return?
 
     def get_user(self, *, email, password):
-        return self.db.fetch_user(email=email, password=password)
+        query_args = (email, password)
+        self.db.cursor.execute(FETCH_USER, query_args)
+        user = self.db.cursor.fetchone()
+        self.db.connection.commit()
+        return user
 
-    def set_temp_user(self, *, id, email):
-        self.db.create_temp_user(id=id, email=email)
+    def set_temp_user(self, *, u_id, email):        
+        self.db.cursor.execute(CREATE_TEMP_USER)
+        self.db.cursor.execute(INSERT_TEMP_USER, (u_id, email))
+        self.db.connection.commit()
 
     def del_temp_user(self):
-        self.db.del_temp_user()
+        self.db.cursor.execute(DROP_TABLE)
+        self.db.connection.commit()
 
-    """
-    def get_movies(self):
-        return self.db.show_movies()
-
-    def get_projectons(self, *, movie_id, order):
-        movie = self.db.get_movie_by_id(movie_id)
-        if movie is None:
-            raise Exception("Movie is not found.")
-        return self.db.show_all_projections(movie_id=movie_id, order=order)
-    
-    def get_projectons_by_date(self, *, movie_id, date):
-        movie = self.db.get_movie_by_id(movie_id)
-        if movie is None:
-            raise Exception("Movie is not found.")
-        pr = self.db.show_projections_date(movie_id=movie_id, date=date)
-        if pr is None:
-            raise Exception("No projections.")
-        return pr
-
-    def show_seats(self, projection_id):
-        return self.db.get_seats(projection_id=projection_id)
-
-    def return_reserved_seats(self, projection_id):
-        return self.db.get_seats(projection_id=projection_id)
-    
-
-    def insert_reservation(self, *, projection_id, row, col):
-        if self.model.id is not None:
-            self.db.make_reservation(user_id=self.model.id, projection_id=projection_id, row=row, col=col)
-
-    def delete_reservation(self, *, projection_id, row, col):
-        if self.model.id is None:
-            self.db.delete_reservation(user_id=self.model.id, projection_id=projection_id, row=row, col=col)
-    
-    def get_user_seats(self, *, projection_id):
-        if self.model.id is not None:
-            return self.db.get_user_seats(user_id=self.model.id, projection_id=projection_id)
-    """
-    def all(self):
-        raw_users = self.db.cursor.execute()  # TODO: Select all users
-
-        return [self.model(**row) for row in raw_users]
-
+    def get_user_id(self, email):
+        self.db.cursor.execute(GET_USER_ID, (email,))
+        user = self.db.cursor.fetchone()
+        self.db.connection.commit()
+        if user is not None:
+            return user[0]
+        return 0
 
 def main():
     ugw = UserGateway()
