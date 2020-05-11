@@ -2,13 +2,22 @@ import sys
 
 from cinema_app.db import Database
 from cinema_app.index_view import curses_main, user
+from cinema_app.db_shema.temp_table import *
+from cinema_app.db_shema.create_db import *
 
 
 class Application:
     @classmethod
     def build(self):
         db = Database()
-        db.create_db_tables()
+        db.cursor.execute(MOVIES)
+        db.cursor.execute(USERS)
+        db.cursor.execute(CLIENT)
+        db.cursor.execute(EMPLOYEE)
+        db.cursor.execute(PROJECTIONS)
+        db.cursor.execute(RESERVATIONS)
+
+        db.connection.commit()
 
         print('Done.')
 
@@ -29,7 +38,8 @@ if __name__ == '__main__':
             raise
         finally:
             db = Database()
-            db.del_temp_user()
+            db.cursor.execute(DROP_TABLE)
+            db.connection.commit()
 
 
     else:
