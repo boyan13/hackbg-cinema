@@ -1,6 +1,6 @@
 class MovieModel:
-    def __init__(self, *, id, name, rating):
-        self.id = id
+    def __init__(self, *, m_id, name, rating):
+        self.id = m_id
         self.name = name
         self.rating = rating
 

@@ -23,7 +23,7 @@ class UserContoller:
         if raw_user is None:
             raise Exception("User not found.")
         else:
-            self.user_gateway.set_temp_user(id=raw_user[0], email=raw_user[1])
+            self.user_gateway.set_temp_user(u_id=raw_user[0], email=raw_user[1])
             return "Login!"
             # TODO temp Table User_t return raw_user
             pass

@@ -1,10 +1,3 @@
-# PROVIDE 2 ARGS (Email and Passowrd).
-# Return ID and EMAIL
-# if EMAIL and PASSWORD arguments match any.
-
-
-
-
 MAKE_RESERVETION = '''
 INSERT INTO Reservations(user_id, projection_id, row, col)
 VALUES (?, ?, ?, ?);'''
@@ -32,4 +25,3 @@ Projections AS p ON r.projection_id = p.id LEFT JOIN Movies AS m
 ON p.movie_id = m.id
 WHERE r.user_id =  ?;
 '''
-

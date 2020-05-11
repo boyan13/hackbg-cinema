@@ -30,6 +30,7 @@ class UserModel:
         elif re.search('[A-Z]', password) is None:
             raise Exception("Make sure your password has a capital letter in it.")
         else:
+            # print("Your email and password are fine.")
             return True
         return False
 
