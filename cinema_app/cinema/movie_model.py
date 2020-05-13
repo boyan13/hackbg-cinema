@@ -1,8 +1,17 @@
+from ..db import Database
+from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+
+
+db = Database()
+
 class MovieModel:
-    def __init__(self, *, m_id, name, rating):
-        self.id = m_id
-        self.name = name
-        self.rating = rating
+    __tablename__ = "Movies"
+    Id = Column(Integer, primary_key=True)
+    name = Column(String)
+    rating = Column(Float)
+
 
     def validete_list_elements(self, elements):
         if elements is None:
