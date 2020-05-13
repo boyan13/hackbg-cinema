@@ -1,12 +1,11 @@
-import sqlite3
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-from .settings import DB_NAME
 
-class Database:
+class Database():
     def __init__(self):
-        self.connection = sqlite3.connect(DB_NAME)
-        self.cursor = self.connection.cursor()
-
-    def __del__(self):
-        self.connection.close()
-        # print('Am closing meself')
+        self.Base = declarative_base()
+        self.engine = create_engine("sqlite:///Cinemaa.db")
+        self.sessionM = sessionmaker(bind=self.engine)
+        self.session = self.sessionM()
