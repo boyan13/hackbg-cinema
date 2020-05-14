@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 db = Database()
 
-class MovieModel:
+class MovieModel(db.Base):
     __tablename__ = "Movies"
     Id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -21,3 +21,6 @@ class MovieModel:
     def validate_movie(self, movie):
         if movie is None:
             raise Exception("Movie is not found.")
+
+
+db.Base.metadata.create_all(db.engine, tables=[MovieModel.__table__])
