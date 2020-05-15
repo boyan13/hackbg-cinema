@@ -1,7 +1,8 @@
+# Internal Imports
+from ..decorators import login_required
 from .movie_gateway import MovieGateway
 from .projection_gateway import ProjectionGateway
 from .reservation_gateway import ReservationGateway
-from ..decorators import login_required
 
 
 class CinemaController:

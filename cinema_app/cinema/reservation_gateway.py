@@ -1,9 +1,10 @@
+# Internal Imports
 from ..db import Database
-from .reservation_model import ReservationModel
 from ..db_shema.reservations import *
 from ..users.models import Temp_user
 from .movie_model import MovieModel
 from .projection_model import ProjectionModel
+from .reservation_model import ReservationModel
 
 
 class ReservationGateway:

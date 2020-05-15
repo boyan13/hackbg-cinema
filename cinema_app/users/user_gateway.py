@@ -1,9 +1,8 @@
+# Internal Imports
 from ..db import Database
 from ..db_shema.user import *
 from ..db_shema.temp_table import *
 from .models import UserModel, ClientModel, Temp_user
-
-
 
 
 class UserGateway:

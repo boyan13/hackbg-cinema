@@ -1,7 +1,10 @@
-import curses
-import curses.textpad
+# Internal Imports
 from .controllers import UserContoller
 from .models import login_exceptions, signin_exceptions
+
+# STD Library Imports
+import curses
+import curses.textpad
 
 
 class UserViews:

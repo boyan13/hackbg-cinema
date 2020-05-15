@@ -1,12 +1,16 @@
-import re
+# Internal Imports
 from ..db import Database
+
+# STD Library Imports
+import re
+
+# Third-Party Library Imports
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 
 db = Database()
-
 signin_exceptions = ["Invalid email.", "Make sure your password is at lest 8 letters.", "Make sure your password has a number in it.", "Make sure your password has a capital letter in it."]
 login_exceptions = ["User not found."]
 
@@ -59,7 +63,6 @@ class Temp_user(db.Base):
     email = Column(String)
     temp_user = relationship("ClientModel", backref="temp_user")
 
-db.Base.metadata.create_all(db.engine, tables=[UserModel.__table__, ClientModel.__table__])
 
 # def main():
 #     UserModel.validate("AZ@abv.bg")
