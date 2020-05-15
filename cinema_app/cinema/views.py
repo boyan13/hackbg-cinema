@@ -116,7 +116,7 @@ class CinemaViews:
     def print_program(self):
         projections = self.controller.all_projections()
         for p in projections:
-            print("Id: {}, Movie: {}, Time: {}, Date: {}, Seats: {}".format(p[3], p[0], p[1], p[2], p[4]))
+            print("Id: {}, Movie: {}, Time: {}, Date: {}".format(p[3], p[0], p[1], p[2]))
         time.sleep(len(projections))
         os.system('cls' if os.name == 'nt' else 'clear')
 

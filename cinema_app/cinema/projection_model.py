@@ -7,8 +7,6 @@ from .movie_model import MovieModel
 
 db = Database()
 
-mm = MovieModel()
-
 
 class ProjectionModel(db.Base):
     __tablename__ = "ProjectionModel"
