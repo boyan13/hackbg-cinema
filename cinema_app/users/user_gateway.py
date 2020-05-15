@@ -19,7 +19,7 @@ class UserGateway:
         self.db.session.commit()
 
     def get_user(self, *, email, password):
-        user = self.db.session.query(UserModel).filter(UserModel.email == email, UserModel.password == password).first()
+        user = self.db.session.query(UserModel.Id, UserModel.email).filter(UserModel.email == email, UserModel.password == password).first()
         return user
 
     def set_temp_user(self, *, u_id, email): 

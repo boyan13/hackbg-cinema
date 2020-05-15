@@ -10,6 +10,7 @@ db = Database()
 signin_exceptions = ["Invalid email.", "Make sure your password is at lest 8 letters.", "Make sure your password has a number in it.", "Make sure your password has a capital letter in it."]
 login_exceptions = ["User not found."]
 
+
 class UserModel(db.Base):
     __tablename__ = "Users"
     Id = Column(Integer, primary_key=True)
@@ -56,7 +57,7 @@ class Temp_user(db.Base):
     Id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("Clients.Id"))
     email = Column(String)
-    user = relationship("UserModel", backref="Clients")
+    temp_user = relationship("ClientModel", backref="temp_user")
 
 db.Base.metadata.create_all(db.engine, tables=[UserModel.__table__, ClientModel.__table__])
 
