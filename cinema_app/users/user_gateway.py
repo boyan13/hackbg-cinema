@@ -28,6 +28,7 @@ class UserGateway:
         self.db.session.commit()
 
     def del_temp_user(self):
+        print("Here")
         Temp_user.__table__.drop(self.db.engine)
 
     def get_user_id(self, email):
