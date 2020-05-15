@@ -1,47 +1,40 @@
 from ..db import Database
 from ..db_shema.user import *
 from ..db_shema.temp_table import *
-from .models import UserModel
+from .models import UserModel, ClientModel, Temp_user
 
 
 
 
 class UserGateway:
     def __init__(self):
-        self.model = UserModel(id=None, email=None)
+        self.model = UserModel()
         self.db = Database()
 
     def create(self, *, email, password):
-        user_data = (email, password)
-        self.db.cursor.execute(CREATE_USER, user_data)
-        u_id = self.get_user_id(email)
-        self.db.cursor.execute(CREATE_CLIENT, (u_id,))
-        self.db.connection.commit()
-
-        # TODO: What whould I return?
+        self.db.session.add_all([UserModel(email=email, password=password)])
+        self.db.session.commit()
+        u_id = self.db.session.query(UserModel.Id).filter(UserModel.email == email).first()
+        self.db.session.add_all([ClientModel(user_id=u_id[0])])
+        self.db.session.commit()
 
     def get_user(self, *, email, password):
-        query_args = (email, password)
-        self.db.cursor.execute(FETCH_USER, query_args)
-        user = self.db.cursor.fetchone()
-        self.db.connection.commit()
+        user = self.db.session.query(UserModel.Id, UserModel.email).filter(UserModel.email == email, UserModel.password == password).first()
         return user
 
-    def set_temp_user(self, *, u_id, email):        
-        self.db.cursor.execute(CREATE_TEMP_USER)
-        self.db.cursor.execute(INSERT_TEMP_USER, (u_id, email))
-        self.db.connection.commit()
+    def set_temp_user(self, *, u_id, email): 
+        self.db.Base.metadata.create_all(self.db.engine, tables=[Temp_user.__table__])
+        self.db.session.add_all([Temp_user(email=email, user_id=u_id)])
+        self.db.session.commit()
 
     def del_temp_user(self):
-        self.db.cursor.execute(DROP_TABLE)
-        self.db.connection.commit()
+        print("Here")
+        Temp_user.__table__.drop(self.db.engine)
 
     def get_user_id(self, email):
-        self.db.cursor.execute(GET_USER_ID, (email,))
-        user = self.db.cursor.fetchone()
-        self.db.connection.commit()
-        if user is not None:
-            return user[0]
+        u_id = self.db.session.query(UserModel.Id).filter(UserModel.email == email).first()
+        if u_id is not None:
+            return u_id.Id
         return 0
 
 def main():
