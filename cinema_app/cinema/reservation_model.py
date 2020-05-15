@@ -1,6 +1,9 @@
+# Internal Imports
+from ..db import Database
 from .movie_model import MovieModel
 from .projection_model import ProjectionModel
-from ..db import Database
+
+# Third-Party Library Imports
 from sqlalchemy import Column, Integer
 from sqlalchemy import ForeignKey
 
@@ -20,5 +23,3 @@ class ReservationModel(db.Base):
         if elements is None:
             return ["Nothing found."]
         return elements
-
-db.Base.metadata.create_all(db.engine, tables=[ReservationModel.__table__])

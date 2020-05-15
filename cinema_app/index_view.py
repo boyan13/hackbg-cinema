@@ -1,10 +1,12 @@
-import curses
-import time
-
+# Internal Imports
 from .color_schemes import create_color_schemes
 from .users.views import UserViews
 from .cinema.views import CinemaViews
 from .cinema.controllers import CinemaController
+
+# STD Library Imports
+import curses
+import time
 
 registration_options = ['Login', 'Sign in']
 user_options = ['Make Reservation', 'Cancel Reservation', 'View Reservations']  # Must be logged in

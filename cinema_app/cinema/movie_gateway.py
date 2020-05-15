@@ -1,6 +1,7 @@
+# Internal Imports
 from ..db import Database
-from .movie_model import MovieModel
 from ..users.models import Temp_user
+from .movie_model import MovieModel
 
 
 class MovieGateway:

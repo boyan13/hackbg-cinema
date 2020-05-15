@@ -1,8 +1,9 @@
+# Internal Imports
 from ..db import Database
-from .projection_model import ProjectionModel
-from .movie_model import MovieModel
-from .reservation_model import ReservationModel
 from ..db_shema.projections import *
+from .movie_model import MovieModel
+from .projection_model import ProjectionModel
+from .reservation_model import ReservationModel
 
 
 class ProjectionGateway:
