@@ -26,19 +26,22 @@ class ProjectionGateway:
     #     return projections
 
     def all_projections(self):
-        pr = self.db.session.query(ProjectionModel).all()
+        pr = self.db.session.query(MovieModel.name,\
+            ProjectionModel.hour,\
+            ProjectionModel.date,\
+            ProjectionModel.Id).filter(ProjectionModel.movie_id == MovieModel.Id).all()  # .join(MovieModel, ProjectionModel.movie_id)
         self.db.session.commit()
         # self.db.cursor.execute(GET_ALL_PROJECTIONS)
         # pr = self.db.cursor.fetchall()
         # self.db.connection.commit()
         return pr
 
-    # def get_seats(self, projection_id):
-    #     seats = self.db.session.query(ReservationModel.row, ReservationModel.col).filter(ReservationModel.projection_id == projection_id).all()
-    #     self.db.session.commit()
-    #     return seats
+    def get_seats(self, projection_id):
+        seats = self.db.session.query(ReservationModel.row, ReservationModel.col).filter(ReservationModel.projection_id == projection_id).all()
+        self.db.session.commit()
+        return seats
 
-    # def get_user_seats(self, *, u_id, projection_id):
-    #     seats = self.db.session.query(ReservationModel.row, ReservationModel.col).filter(ReservationModel.projection_id == projection_id, ReservationModel.user_id = u_id ).all()
-    #     self.db.session.commit()
-    #     return seats
+    def get_user_seats(self, *, u_id, projection_id):
+        seats = self.db.session.query(ReservationModel.row, ReservationModel.col).filter(ReservationModel.projection_id == projection_id, ReservationModel.user_id = u_id ).all()
+        self.db.session.commit()
+        return seats

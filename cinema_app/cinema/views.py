@@ -131,7 +131,7 @@ class CinemaViews:
     def show_program(self):
         projections = self.controller.all_projections()
         for p in projections:
-            print("Id: {}, Movie: {}, Time: {}, Date: {}, Seats: {}".format(p[3], p[0], p[1], p[2], p[4]))
+            print("Id: {}, Movie: {}, Time: {}, Date: {}".format(p[3], p[0], p[1], p[2]))
 
     def show_reservations(self):
         id = self.controller.get_user_info()[0]
