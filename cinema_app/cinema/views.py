@@ -1,5 +1,8 @@
-from .controllers import CinemaController
+# Internal Imports
 from ..decorators import login_required
+from .controllers import CinemaController
+
+# STD Library Imports
 import time
 import os
 
@@ -109,15 +112,17 @@ class CinemaViews:
             for r in reservations:
                 print("Row: {}, Col: {}, Movie: {}, Time: {}, Date: {}, Id: {}".format(r[0], r[1], r[2], r[3],r[4],r[6]))
 
-        time.sleep(len(reservations))
+        print('\n')
+        input("Press any key to leave this menu")
         os.system('cls' if os.name == 'nt' else 'clear')
 
     # Display projections info (the entire programm)
     def print_program(self):
         projections = self.controller.all_projections()
         for p in projections:
-            print("Id: {}, Movie: {}, Time: {}, Date: {}, Seats: {}".format(p[3], p[0], p[1], p[2], p[4]))
-        time.sleep(len(projections))
+            print("Id: {}, Movie: {}, Time: {}, Date: {}".format(p[3], p[0], p[1], p[2]))
+        print('\n')
+        input("Press any key to leave this menu")
         os.system('cls' if os.name == 'nt' else 'clear')
 
     # Display all movies and ratings
@@ -125,13 +130,15 @@ class CinemaViews:
         movies = self.controller.get_movies()
         for m in movies:
             print("Id: {}, Name: {}, Rating: {}".format(m[0], m[1], m[2]))
-        time.sleep(len(movies))
+
+        print('\n')
+        input("Press any key to leave this menu")
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def show_program(self):
         projections = self.controller.all_projections()
         for p in projections:
-            print("Id: {}, Movie: {}, Time: {}, Date: {}, Seats: {}".format(p[3], p[0], p[1], p[2], p[4]))
+            print("Id: {}, Movie: {}, Time: {}, Date: {}".format(p[3], p[0], p[1], p[2]))
 
     def show_reservations(self):
         id = self.controller.get_user_info()[0]

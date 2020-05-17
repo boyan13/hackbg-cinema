@@ -1,5 +1,10 @@
-from .user_gateway import UserGateway, UserModel
+# Internal Imports
+from .user_gateway import UserGateway
+
+# STD Library Imports
 import hashlib
+import time
+
 
 class UserContoller:
     def __init__(self):
@@ -24,7 +29,6 @@ class UserContoller:
             raise Exception("User not found.")
         else:
             self.user_gateway.set_temp_user(u_id=raw_user[0], email=raw_user[1])
-            return "Login!"
             # TODO temp Table User_t return raw_user
             pass
 

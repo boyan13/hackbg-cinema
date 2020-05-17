@@ -1,12 +1,26 @@
+# Internal Imports
+from ..db import Database
+
+# STD Library Imports
 import re
 
+# Third-Party Library Imports
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
-class UserModel:
-    def __init__(self, *, id, email):
-        self.id = id
-        self.email = email
-        self.signin_exceptions = ["Invalid email.", "Make sure your password is at lest 8 letters.", "Make sure your password has a number in it.", "Make sure your password has a capital letter in it."]
-        self.login_exceptions = ["User not found."]
+
+db = Database()
+signin_exceptions = ["Invalid email.", "Make sure your password is at lest 8 letters.", "Make sure your password has a number in it.", "Make sure your password has a capital letter in it."]
+login_exceptions = ["User not found."]
+
+
+class UserModel(db.Base):
+    __tablename__ = "Users"
+    Id = Column(Integer, primary_key=True)
+    email = Column(String)
+    password = Column(String)
+
     @staticmethod
     def validate(email, password):
         count_at = email.count("@")
@@ -35,9 +49,24 @@ class UserModel:
         return False
 
 
-def main():
-    UserModel.validate("AZ@abv.bg")
+class ClientModel(db.Base):
+    __tablename__ = "Clients"
+    Id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("Users.Id"))
+    user = relationship("UserModel", backref="Clients")
 
 
-if __name__ == '__main__':
-    main()
+class Temp_user(db.Base):
+    __tablename__ = "temp_user"
+    Id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("Clients.Id"))
+    email = Column(String)
+    temp_user = relationship("ClientModel", backref="temp_user")
+
+
+# def main():
+#     UserModel.validate("AZ@abv.bg")
+
+
+# if __name__ == '__main__':
+#     main()

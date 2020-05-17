@@ -1,18 +1,23 @@
+# Internal Imports
 from .db import Database
+
+# Third-Party Library Imports
+from sqlalchemy.engine.reflection import Inspector
 
 
 def login_required(func):
     d = Database()
+
     def wrapper(*args, **kwargs):
-        d.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='temp_user';")
-        user = d.cursor.fetchone()
-        d.connection.commit()
-        if user is not None:
+        inspector = Inspector.from_engine(d.engine)
+        temp_u = False
+        if "temp_user" in inspector.get_table_names():
+            temp_u = True
+        if temp_u:
             return func(*args, **kwargs)
         else:
             raise Exception("First login!")
     return wrapper
-
 
 
 @login_required

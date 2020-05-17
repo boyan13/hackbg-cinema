@@ -1,24 +1,19 @@
-import sys
-
+# Internal Imports
 from cinema_app.db import Database
 from cinema_app.index_view import curses_main, user
 from cinema_app.db_shema.temp_table import *
 from cinema_app.db_shema.create_db import *
+from cinema_app.users.user_gateway import UserGateway
+
+# STD Library Imports
+import sys
 
 
 class Application:
     @classmethod
     def build(self):
         db = Database()
-        db.cursor.execute(MOVIES)
-        db.cursor.execute(USERS)
-        db.cursor.execute(CLIENT)
-        db.cursor.execute(EMPLOYEE)
-        db.cursor.execute(PROJECTIONS)
-        db.cursor.execute(RESERVATIONS)
-
-        db.connection.commit()
-
+        db.create()
         print('Done.')
 
     @classmethod
@@ -34,13 +29,9 @@ if __name__ == '__main__':
     elif command == 'start':
         try:
             Application.start()
-        except Exception as exc:
+        except Exception:
             raise
         finally:
-            db = Database()
-            db.cursor.execute(DROP_TABLE)
-            db.connection.commit()
-
-
+            UserGateway().del_temp_user()
     else:
         raise ValueError(f'Unknown command {command}. Valid ones are "build" and "start"')

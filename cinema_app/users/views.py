@@ -1,14 +1,18 @@
+# Internal Imports
+from .controllers import UserContoller
+from .models import login_exceptions, signin_exceptions
+
+# STD Library Imports
 import curses
 import curses.textpad
-from .controllers import UserContoller
 
 
 class UserViews:
 
     def __init__(self):
         self.controller = UserContoller()
-        self.login_exceptions = self.controller.user_gateway.model.login_exceptions
-        self.signin_exceptions = self.controller.user_gateway.model.signin_exceptions
+        self.login_exceptions = login_exceptions
+        self.signin_exceptions = signin_exceptions
 
     def retry_dialogue(self, stdscr, message):
         stdscr.clear()
@@ -89,18 +93,15 @@ class UserViews:
                 if key == curses.KEY_DC or key == curses.KEY_BACKSPACE or key == 127:
                     if len(display) > 0:
                         display = display[:-1]
-                    if cursor_movement_x > line_start_x:
+                    if cursor_movement_x > 0:
                         cursor_movement_x -= 1
                     if len(password) > 0:
                         password = password[:-1]
 
                 else:
-                    if len(display) < 50:
-                        display += '*'
-                    if cursor_movement_x < line_start_x + 50:
-                        cursor_movement_x += 1
-                    if len(password) < 50:
-                        password += chr(key)
+                    display += '*'
+                    cursor_movement_x += 1
+                    password += chr(key)
 
                 stdscr.addstr(line_start_y, line_start_x, display)
                 stdscr.refresh()
@@ -139,7 +140,3 @@ class UserViews:
                     self.signin(stdscr)
                 else:
                     return
-
-
-if __name__ == '__main__':
-    curses.wrapper(login)
