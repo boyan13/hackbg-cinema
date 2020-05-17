@@ -25,7 +25,7 @@ class CinemaController:
             pr = self.projection_gateway.get_all_projections(movie_id, order)
             return self.projection_gateway.model.validate_list_elements(pr)
 
-    def get_projections_by_date(set, *, movie_id, pr_date):
+    def get_projections_by_date(self, *, movie_id, pr_date):
         movie = self.movie_gateway.get_movie(movie_id)
         try:
             self.movie_gateway.model.validate_movie(movie)
