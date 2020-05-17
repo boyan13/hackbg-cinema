@@ -140,7 +140,3 @@ class UserViews:
                     self.signin(stdscr)
                 else:
                     return
-
-
-if __name__ == '__main__':
-    curses.wrapper(login)
